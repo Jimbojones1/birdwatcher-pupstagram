@@ -2,10 +2,25 @@ const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const SECRET = process.env.SECRET;
 
+
+
+
 module.exports = {
   signup,
   login
 };
+
+
+const S3 = require('aws-sdk/clients/s3');
+// initialize the constructor function
+const s3 = new S3();
+
+// we'll use the module uuid to generate random names for our aws file
+const { v4: uuidv4 } = require('uuid')
+
+// our s3 aws bucket from our .env file!
+const BUCKET_NAME = process.env.BUCKET
+
 
 async function signup(req, res) {
 
