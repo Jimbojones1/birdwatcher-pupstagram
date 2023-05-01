@@ -12,7 +12,14 @@ import { useState } from "react";
 import userService from "../../utils/userService";
 import ErrorMessage from '../../components/ErrorMessage/ErrorMessage'
 
-export default function Signup() {
+// this is a hook that allows us to programatically navigate to a different route
+import { useNavigate } from "react-router-dom";
+
+export default function Signup({handleSignUpOrLogin}) {
+
+  // navigate is a function that accepts a route to change too!
+  const navigate = useNavigate()
+
   const [state, setState] = useState({
     username: "",
     email: "",
@@ -68,6 +75,8 @@ export default function Signup() {
 		await userService.signup(formData); //this makes the http request to the our express server /api/users/signup
 		// when it finishes it stores the jwt toke in localstorage,
 		// we can switch the view (go to the feed page or something!)
+    handleSignUpOrLogin(); // this updates the state in the app with the correct token from localstorage!
+    navigate('/'); // this programmatically navigates the client to the home page (refere to app.js for the '/')
 
 	} catch(err){
 		console.log(err.message, ' this is the error singnup up')
