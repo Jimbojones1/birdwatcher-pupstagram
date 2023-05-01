@@ -9,6 +9,8 @@ import {
 } from "semantic-ui-react";
 
 import { useState } from "react";
+import userService from "../../utils/userService";
+import ErrorMessage from '../../components/ErrorMessage/ErrorMessage'
 
 export default function Signup() {
   const [state, setState] = useState({
@@ -39,7 +41,41 @@ export default function Signup() {
 	setSelectedFile(e.target.files[0]);
   }
 
-  function handleSubmit(){}
+  async function handleSubmit(e){
+	e.preventDefault();
+    // ===================================================================
+	// IN THIS CASE
+	// WE are sending over a photo/file
+	// We have to turn our data into formdata, otherwise it would be JSON
+	// YOu only have to do this if you're sending over a photo/file
+	const formData = new FormData(); // <- this is from the browser, allows us to create key value pairs
+	// photo is the key, the value is the stuff from our state
+	formData.append('photo', selectedFile);
+	// we could add the rest 1 by 1 or we can use a for in loop
+	// formData.append('username', state.username);
+	// formData.append('email', state.email);
+
+	for (let fieldName in state){
+		formData.append(fieldName, state[fieldName])
+	}
+	// if you want to view the formData in the console you have to loop over it, otherwise it will look empty!
+	console.log(formData.forEach((item) => console.log(item)));
+	// ===================================================================
+
+
+	try {
+
+		await userService.signup(formData); //this makes the http request to the our express server /api/users/signup
+		// when it finishes it stores the jwt toke in localstorage,
+		// we can switch the view (go to the feed page or something!)
+
+	} catch(err){
+		console.log(err.message, ' this is the error singnup up')
+		setError('Check your terminal, there was an error signing up!')
+	}
+
+
+  }
 
   return (
     <Grid textAlign="center" style={{ height: "100vh" }} verticalAlign="middle">
