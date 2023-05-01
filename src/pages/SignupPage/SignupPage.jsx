@@ -19,11 +19,25 @@ export default function Signup() {
     bio: "",
   });
 
+  // profile image
+  const [selectedFile, setSelectedFile] = useState('')
+
   const [error, setError] = useState("");
 
-  function handleChange() {}
+  function handleChange(e) {
+	setState({
+		...state,
+		// es6 computed property syntax
+		[e.target.name]: e.target.value
+	})
+  }
 
-  function handleFileInput() {}
+  function handleFileInput(e) {
+	// this takes the first file the user uploads
+	// and sets it in state
+	console.log(e.target.files)
+	setSelectedFile(e.target.files[0]);
+  }
 
   function handleSubmit(){}
 
