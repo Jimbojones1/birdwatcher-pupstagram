@@ -21,6 +21,7 @@ function App() {
   // userService.signup(formData)
   // userService.login(state)
   function handleSignUpOrLogin(){
+    // userService.getUser, grabs the token from localstorage, decodes it to an object, that we can we store in our state!
     setUser(userService.getUser())
   }
 
