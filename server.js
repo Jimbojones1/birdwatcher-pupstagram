@@ -23,7 +23,7 @@ app.use(express.json()); // parses json http requests, to make them availiable o
 app.use(require("./config/auth"));
 // api routes must be before the "catch all" route
 app.use("/api/users", require("./routes/api/users"));
-
+app.use('/api/posts', require('./routes/api/posts'));
 // "catch all" route
 app.get('/*', function(req, res) {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
