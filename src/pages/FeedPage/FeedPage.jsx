@@ -13,10 +13,11 @@ export default function FeedPage() {
 
   // we will call this function in our AddPuppyForm handleSubmit,
   // this way when we get a response from the server, we can update our state
-  async function handleAddPost(post) {
+  async function handleAddPost(post) {// post is the formData from addPuppyForm
     try {
       const responseData = await postsApi.create(post); // this is calling our create function in the postsApi utils folder
       console.log(responseData, " response from the server");
+	  setPosts([responseData.data, ...posts]); // spread operator to keep all the posts that are already in state!
     } catch (err) {
       console.log(err, " error in addPost");
     }

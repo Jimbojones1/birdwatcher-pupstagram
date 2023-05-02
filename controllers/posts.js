@@ -38,6 +38,7 @@ function create(req, res){
 				photoUrl: data.Location // data.Location comes from the callback in the s3 upload
 			})
 
+			await post.populate('user'); // populating on a mongoose document! this gives us the user object
 			// this response will show up in the feedPage in   const responseData = await postsApi.create(post);
 			res.status(201).json({data: post}) // <- this is what responseData should be
 
