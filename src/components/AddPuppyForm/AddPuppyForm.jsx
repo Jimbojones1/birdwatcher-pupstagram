@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { Button, Form, Segment} from 'semantic-ui-react'
 
-export default function AddPuppyForm(){
+export default function AddPuppyForm({handleAddPost}){
 
 	const [caption, setCaption] = useState('')
 
@@ -27,6 +27,7 @@ export default function AddPuppyForm(){
 		formData.append('caption', caption);
 		formData.append('photo', selectedFile);
 
+		handleAddPost(formData); // handleAddPost comes from the Feed component, because we are storing state there, so we'll define the api call in that component
 		// then we can our api call! to our express server!
 
 	}
