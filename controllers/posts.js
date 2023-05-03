@@ -55,7 +55,7 @@ async function index(req, res){
         // so you'll have access to the users information 
         // when you fetch teh posts
         const posts = await Post.find({}).populate('user').exec()
-        res.status(200).json({posts})
+        res.status(200).json({posts: posts})
     } catch(err){
 
     }

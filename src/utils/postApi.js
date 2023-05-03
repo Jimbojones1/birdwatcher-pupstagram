@@ -27,10 +27,21 @@ export function create(data){
 }
 
 
+// This function is being called in the FeedPage when our useEffect runs when the component loads
+// in order to get all the posts
+
+
 export function getAll() {
+	// the return, helps because 
+	// whenever we call getAll, it returns fetch making an api call
+	// if there was no return, fetch would immediatly make the api call when the function is defined
+
+	// we want to wait to make the api call when we want to use getAll (When the FeedPage loads)
 	return fetch(BASE_URL, {
 	  headers: {
-		'Authorization': 'Bearer ' + tokenService.getToken()
+		// convention!
+		// It's always going to Bearer + a space + the jwt token
+		Authorization: 'Bearer ' + tokenService.getToken()
 	  }
 	})
 	.then(res => res.json());
