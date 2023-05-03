@@ -2,7 +2,7 @@ import PageHeader from "../../components/Header/Header";
 import AddPuppyForm from "../../components/AddPuppyForm/AddPuppyForm";
 import PostDisplay from "../../components/PostDisplay/PostDisplay";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Grid } from "semantic-ui-react";
 
 // this will import all the functions from postApi, and attach to an object call postsApi
@@ -23,6 +23,24 @@ export default function FeedPage() {
     }
   }
 
+  async function getPosts() {
+    try {
+      const response = await postsApi.getAll();
+      console.log(response, " data");
+      setPosts(response.posts);
+    
+    } catch (err) {
+      console.log(err.message, " this is the error in getPosts");
+    }
+  }
+
+  useEffect(() => {
+    //Getting posts, C(R)UD
+
+    getPosts();
+  }, []); // This is useEffect runs once when the Feed component
+  // loads
+
   return (
     <Grid centered>
       <Grid.Row>
@@ -37,7 +55,7 @@ export default function FeedPage() {
       </Grid.Row>
       <Grid.Row>
         <Grid.Column style={{ maxWidth: 450 }}>
-          <PostDisplay />
+          <PostDisplay   posts={posts}/>
         </Grid.Column>
       </Grid.Row>
     </Grid>

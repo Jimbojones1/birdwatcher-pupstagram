@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const Post = require('../models/post');
 const jwt = require('jsonwebtoken');
 const SECRET = process.env.SECRET;
 
@@ -7,7 +8,8 @@ const SECRET = process.env.SECRET;
 
 module.exports = {
   signup,
-  login
+  login,
+  profile
 };
 
 
@@ -57,18 +59,6 @@ async function signup(req, res) {
   }) // end of s3.upload
 
 
-  // const user = new User(req.body);
-  // try {
-  //   await user.save();
-  //   const token = createJWT(user);
-  //   // the code that runs in response to this on the client
-  //   // is in the utils/userService signup function, that last
-  //   // .then! 
-  //   res.json({ token });
-  // } catch (err) {
-  //   // Probably a duplicate email
-  //   res.status(400).json(err);
-  // }
 }
 // https://git.generalassemb.ly/SEI-CC/sei-2-21-birdwatchers/blob/main/work/w11/d1/jwt-boilerplatec-code.md
 async function login(req, res) {
@@ -91,6 +81,22 @@ async function login(req, res) {
   }
 }
 
+async function profile(req, res){
+  try {
+    // First find the user using the params from the request
+    // findOne finds first match, its useful to have unique usernames!
+    const user = await User.findOne({username: req.params.username})
+    // Then find all the posts that belong to that user
+    if(!user) return res.status(404).json({error: 'User not found'})
+
+    const posts = await Post.find({user: user._id}).populate("user").exec();
+    console.log(posts, ' this posts')
+    res.status(200).json({data: posts, user: user})
+  } catch(err){
+    console.log(err)
+    res.status(400).json({err})
+  }
+}
 /*----- Helper Functions -----*/
 
 function createJWT(user) {
