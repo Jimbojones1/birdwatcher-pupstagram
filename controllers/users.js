@@ -89,9 +89,11 @@ async function profile(req, res){
     // Then find all the posts that belong to that user
     if(!user) return res.status(404).json({error: 'User not found'})
 
+    // using the post model to find all the users posts (the user from req.params)
+    // finding all posts by a user, and populating the user property!
     const posts = await Post.find({user: user._id}).populate("user").exec();
     console.log(posts, ' this posts')
-    res.status(200).json({data: posts, user: user})
+    res.status(200).json({posts: posts, user: user})
   } catch(err){
     console.log(err)
     res.status(400).json({err})
