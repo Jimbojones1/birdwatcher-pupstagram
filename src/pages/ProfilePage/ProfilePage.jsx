@@ -13,7 +13,7 @@ import Loader from "../../components/Loader/Loader";
 import userService from "../../utils/userService";
 import * as likesApi from '../../utils/likesApi'
 
-export default function ProfilePage({loggedUser}) {
+export default function ProfilePage({loggedUser, handleLogout}) {
   const [posts, setPosts] = useState([]);
   const [profileUser, setProfileUser] = useState({});
   const [loading, setLoading] = useState(true); // the page is loading when the component loads
@@ -84,7 +84,7 @@ export default function ProfilePage({loggedUser}) {
   if (error) {
     return (
       <>
-        <PageHeader/>
+        <PageHeader loggedUser={user} handleLogout={handleLogout} />
         <ErrorMessage error={error} />;
       </>
     );
@@ -93,7 +93,7 @@ export default function ProfilePage({loggedUser}) {
   if (loading) {
     return (
       <>
-        <PageHeader/>
+        <PageHeader loggedUser={loggedUser} handleLogout={handleLogout} />
         <Loader />
       </>
     );
@@ -103,7 +103,7 @@ export default function ProfilePage({loggedUser}) {
     <Grid>
       <Grid.Row>
         <Grid.Column>
-          <PageHeader />
+          <PageHeader loggedUser={loggedUser} handleLogout={handleLogout}  />
         </Grid.Column>
       </Grid.Row>
       <Grid.Row>

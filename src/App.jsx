@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import "./App.css";
 
 import { useState } from 'react'
@@ -28,12 +28,49 @@ function App() {
     setUser(userService.getUser())
   }
 
+  function handleLogout() {
+
+    console.log('being called')
+    userService.logout();
+    setUser(null);
+  }
+  if (user) {
+    // are we logged in?
+    return (
+      <Routes>
+        <Route
+          path="/"
+          element={<FeedPage loggedUser={user} handleLogout={handleLogout} />}
+        />
+        <Route
+          path="/login"
+          element={<LoginPage handleSignUpOrLogin={handleSignUpOrLogin} />}
+        />
+        <Route
+          path="/signup"
+          element={<SignupPage handleSignUpOrLogin={handleSignUpOrLogin} />}
+        />
+        <Route
+          path="/:username"
+          element={
+            <ProfilePage loggedUser={user} handleLogout={handleLogout} />
+          }
+        />
+      </Routes>
+    );
+}
+
   return (
     <Routes>
-      <Route path="/" element={<FeedPage loggedUser={user} />} />
-      <Route path="/login" element={<LoginPage handleSignUpOrLogin={handleSignUpOrLogin}/>} />
-      <Route path='/signup' element={<SignupPage handleSignUpOrLogin={handleSignUpOrLogin}/>} />
-      <Route path="/:username" element={<ProfilePage loggedUser={user} />} />
+      <Route
+        path="/login"
+        element={<LoginPage handleSignUpOrLogin={handleSignUpOrLogin} />}
+      />
+      <Route
+        path="/signup"
+        element={<SignupPage handleSignUpOrLogin={handleSignUpOrLogin} />}
+      />
+      <Route path="/*" element={<Navigate to="/login" />} />
     </Routes>
   );
 }

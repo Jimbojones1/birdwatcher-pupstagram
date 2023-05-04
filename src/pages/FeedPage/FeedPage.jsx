@@ -12,7 +12,7 @@ import * as likesApi from '../../utils/likesApi';
 
 
 import tokenService from "../../utils/tokenService";
-export default function FeedPage({loggedUser}) {
+export default function FeedPage({loggedUser, handleLogout}) {
   const [posts, setPosts] = useState([]); /// array of objects, the posts contain the likes
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -143,7 +143,7 @@ export default function FeedPage({loggedUser}) {
   if (error) {
     return (
       <>
-        <PageHeader />
+        <PageHeader loggedUser={loggedUser} handleLogout={handleLogout} />
       </>
     );
   }
@@ -151,7 +151,7 @@ export default function FeedPage({loggedUser}) {
     <Grid centered>
       <Grid.Row>
         <Grid.Column>
-          <PageHeader />
+          <PageHeader loggedUser={loggedUser} handleLogout={handleLogout} />
         </Grid.Column>
       </Grid.Row>
       <Grid.Row>
