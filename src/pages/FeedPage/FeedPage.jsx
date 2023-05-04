@@ -8,9 +8,12 @@ import { Grid } from "semantic-ui-react";
 
 // this will import all the functions from postApi, and attach to an object call postsApi
 import * as postsApi from "../../utils/postApi";
+import * as likesApi from '../../utils/likesApi';
+
+
 import tokenService from "../../utils/tokenService";
-export default function FeedPage() {
-  const [posts, setPosts] = useState([]); /// array of objects
+export default function FeedPage({loggedUser}) {
+  const [posts, setPosts] = useState([]); /// array of objects, the posts contain the likes
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   // (C)RUD Create
@@ -44,6 +47,39 @@ export default function FeedPage() {
       console.log(err.message, " this is the error in getPosts");
       setLoading(false);
     }
+  }
+
+  // pass this down to Card component because that is where the like button is!
+  // we call this function when the heart is clicked
+  async function addLike(postId){
+	// postId will be passed in when we click on a heart in Card component!
+	try {
+		const data = await likesApi.create(postId);
+		// after we create a like
+		// lets fetch all the posts again, to get the updated posts with the like 
+		// embedded, and getPosts, will update the posts state so our ui will rerender
+		// and we will see the heart change to red
+		getPosts()
+
+
+	} catch(err){
+		console.log(err, ' error in addLike')
+	}
+  }
+
+  // pass this down to Card component because that is where the like button is!
+  // we call this function when the heart is clicked
+  async function removeLike(likeId){
+	try {
+		// likeId will be passed in when we click on heart that is red in the 
+		// Card component
+		const data = await likesApi.removeLike(likeId);
+		// then we will call getPosts to refresh the data, and have an updated post without the like
+		getPosts()
+
+	} catch(err){
+		console.log(err, ' err in remove Like')
+	}
   }
 
   useEffect(() => {
@@ -130,6 +166,9 @@ export default function FeedPage() {
             numPhotosCol={1}
             isProfile={false}
             loading={loading}
+			addLike={addLike}
+			removeLike={removeLike}
+			loggedUser={loggedUser}
           />
         </Grid.Column>
       </Grid.Row>
