@@ -4,9 +4,9 @@ import { useState, useEffect } from "react";
 import { Grid } from "semantic-ui-react";
 
 import ProfileBio from "../../components/ProfileBio/ProfileBio";
-import ProfilePostDisplay from "../../components/ProfilePostDisplay/ProfilePostDisplay";
+import PostDisplay from "../../components/PostDisplay/PostDisplay";
 import PageHeader from "../../components/Header/Header";
-
+import Loader from "../../components/Loader/Loader";
 // we import this in order to call the getProfile function
 // that makes the api call to the backend (express app) in order to get the users
 // information
@@ -48,22 +48,19 @@ export default function ProfilePage() {
   // if anything went wrong with userService.getProfile(username)
   // show this UI
   if (error) {
-    // if this is true, the rest of the function doesn't run!
     return (
       <>
-        <PageHeader />
-        <h1>{error}</h1>
+        <PageHeader/>
+        <ErrorMessage error={error} />;
       </>
     );
   }
 
-  // checking if we are still loading the profile information
   if (loading) {
-	// if this true the rest of the page doesn't run!
     return (
       <>
-        <PageHeader />
-        <h1>Loading...</h1>
+        <PageHeader/>
+        <Loader />
       </>
     );
   }
@@ -82,7 +79,11 @@ export default function ProfilePage() {
       </Grid.Row>
       <Grid.Row centered>
         <Grid.Column style={{ maxWidth: 750 }}>
-          <ProfilePostDisplay />
+		<PostDisplay
+            posts={posts}
+            numPhotosCol={3}
+            isProfile={true}
+			/>
         </Grid.Column>
       </Grid.Row>
     </Grid>
